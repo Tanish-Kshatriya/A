@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script type="text/javascript" src="/___vscode_livepreview_injected_script"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Text Reader</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/2.1.4/tesseract.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            height: 100vh; /* Full height */
+            background: linear-gradient(45deg, #f3f3f3, #fdc830, #f37335); /* Instagram-style gradient */
+            transition: background-color 0.5s;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto; /* Center horizontally */
+            padding: 20px;
+            background: linear-gradient(135deg, #ffffff, #f9f9f9);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            position: relative; /* Position for the scanning overlay */
+            margin-top: 20px; /* Space from the top */
+            transition: background 0.5s;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333; /* Default heading color */
+            transition: color 0.5s; /* Smooth transition for color change */
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            background: linear-gradient(135deg, #ffffff, #e0e0e0);
+        }
+
+        .model-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+        }
+
+        .model-button {
+            flex: 1;
+            margin: 0 5px; /* Margin between buttons */
+            padding: 10px;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+            transition: background 0.3s ease;
+        }
+
+        .model-button:hover {
+            background: linear-gradient(135deg, #0056b3, #00408e);
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(135deg, #28a745, #218838);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s ease;
+            margin-top: 10px; /* Added margin for separation */
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #218838, #1e7e34);
+        }
+
+        #result {
+            margin-top: 20px;
+            white-space: pre-wrap; /* Preserve whitespace in the result */
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            min-height: 100px; /* Ensures space is available */
+        }
+
+        #imagePreview {
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+
+        /* Scanning Overlay */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden; /* Hidden by default */
+            z-index: 1; /* Overlay on top */
+        }
+
+        /* Existing styles... */
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: conic-gradient(
+        #ff3d00, /* Start color */
+        #ffeb3b, /* Middle color */
+        #4caf50, /* End color */
+        #ff3d00  /* Loop back to start */
+    );
+    animation: spin 1.5s linear infinite; /* Faster spinning animation */
+    box-shadow: 0 0 15px rgba(255, 61, 0, 0.5), 0 0 20px rgba(255, 235, 59, 0.5), 0 0 25px rgba(76, 175, 80, 0.5);
+}
+
+/* Keyframe for spinning animation */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(180deg); /* Half rotation for dynamic effect */
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Other styles... */
+
+
+        .edit-area {
+            width: 100%;
+            height: 100px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            resize: vertical; /* Allow vertical resizing */
+        }
+
+        .dark-mode {
+            background: #222;
+            color: white;
+        }
+
+        .dark-mode input[type="file"],
+        .dark-mode .model-button,
+        .dark-mode button {
+            background: #444;
+            color: white;
+            border: 1px solid #555;
+        }
+
+        @media (max-width: 600px) {
+            button {
+                font-size: 14px;
+            }
+        }
+        #resultContainer {
+    position: relative;
+    margin-top: 20px;
+}
+
+#summarizeButton {
+    margin-top: 10px;
+    padding: 10px;
+    background: linear-gradient(135deg, #ff5733, #c70039);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease;
+}
+
+#summarizeButton:hover {
+    background: linear-gradient(135deg, #c70039, #900c3f);
+}
+
+    </style>
+</head>
+<body>
+    <div class="container" id="appContainer">
+        <h1 id="header">Image Text Reader</h1>
+        <input type="file" id="fileInput" accept="image/*">
+        <img id="imagePreview" src="" alt="Image Preview" style="display: none;">
+        
+        <!-- AI Model Buttons -->
+        <div class="model-buttons">
+            <button class="model-button" id="fastModel" onclick="selectModel('fast')">Fast Model</button>
+            <button class="model-button" id="normalModel" onclick="selectModel('normal')">Normal Model</button>
+            <button class="model-button" id="accurateModel" onclick="selectModel('accurate')">Accurate Model</button>
+        </div>
+        
+        <select id="languageSelect">
+            <option value="eng">English</option>
+            <option value="spa">Spanish</option>
+            <option value="fra">French</option>
+            <option value="deu">German</option>
+            <option value="ita">Italian</option>
+            <!-- Add more languages as needed -->
+        </select>
+        
+        <button id="processButton">Extract Text</button>
+        <button id="copyButton" style="display: none;">Copy to Clipboard</button>
+        <button id="downloadButton" style="display: none;">Download Text</button>
+        <button id="resetButton">Reset</button>
+        <textarea class="edit-area" id="result" placeholder="Extracted text will appear here..."></textarea>
+        <button id="toggleDarkMode">Toggle Dark Mode</button>
+        
+       <!-- Scanning Overlay -->
+<div class="overlay" id="overlay">
+   <div class="spinner"></div>
+</div>
+<div id="resultContainer">
+   <div id="result"></div>
+   <button id="summarizeButton" style="display: none;">Summarize Text</button>
+</div>
+
+
+    </div>
+
+    <script>
+      document.getElementById('processButton').onclick = function() {
+    // (Existing extraction logic here...)
+    resultDiv.innerText = text;
+    document.getElementById('summarizeButton').style.display = "block"; // Show summarize button
+};
+
+// Summarization Logic
+document.getElementById('summarizeButton').onclick = function() {
+    const extractedText = document.getElementById('result').innerText;
+
+    // Basic summarization: First few sentences
+    const sentences = extractedText.split('. ').slice(0, 3).join('. ') + '.';
+    resultDiv.innerText = "Summary:\n" + sentences;
+};
+
+      // Function to add extraction result to history
+        let selectedModel = 'normal'; // Default model
+
+        function selectModel(model) {
+            selectedModel = model;
+            // Change button styles to indicate selection
+            document.querySelectorAll('.model-button').forEach(button => {
+                button.style.backgroundColor = ''; // Reset styles
+            });
+            document.getElementById(model + 'Model').style.backgroundColor = '#0056b3'; // Highlight selected model
+        }
+
+        document.getElementById('fileInput').onchange = function(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const img = document.getElementById('imagePreview');
+                img.src = e.target.result;
+                img.style.display = 'block'; // Show image preview
+            };
+
+            reader.readAsDataURL(file);
+        };
+
+        document.getElementById('processButton').onclick = function() {
+            const fileInput = document.getElementById('fileInput');
+            const overlay = document.getElementById('overlay');
+            const resultArea = document.getElementById('result');
+            const copyButton = document.getElementById('copyButton');
+            const downloadButton = document.getElementById('downloadButton');
+            const language = document.getElementById('languageSelect').value;
+
+            resultArea.value = ""; // Clear previous results
+            copyButton.style.display = "none"; // Hide copy button initially
+            downloadButton.style.display = "none"; // Hide download button initially
+
+            if (fileInput.files.length === 0) {
+                alert("Please select an image file.");
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const img = new Image();
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+                img.src = event.target.result;
+
+                img.onload = function() {
+                    // Show the overlay with animation
+                    overlay.style.visibility = "visible";
+
+                   
+
+                    // Start text extraction with Tesseract
+                    Tesseract.recognize(
+                        img.src,
+                        language,
+                        {
+                            logger: m => console.log(m), // Log progress
+                            // Simulate speed by delaying
+                            tessedit_pageseg_mode: Tesseract.PSM.SINGLE_BLOCK,
+                        }
+                    ).then(({ data: { text } }) => {
+                        overlay.style.visibility = "hidden"; // Hide overlay after extraction
+                        resultArea.value = text; // Display extracted text
+                        copyButton.style.display = "inline-block"; // Show copy button
+                        downloadButton.style.display = "inline-block"; // Show download button
+                    });
+                };
+            };
+
+            reader.readAsDataURL(file);
+        };
+
+        // Copy functionality
+        document.getElementById('copyButton').onclick = function() {
+            const result = document.getElementById('result');
+            result.select();
+            document.execCommand('copy');
+            alert('Text copied to clipboard!');
+        };
+
+        // Download functionality
+        document.getElementById('downloadButton').onclick = function() {
+            const text = document.getElementById('result').value;
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'extracted_text.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        };
+
+        // Reset functionality
+        document.getElementById('resetButton').onclick = function() {
+            document.getElementById('fileInput').value = "";
+            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('result').value = "";
+            document.getElementById('copyButton').style.display = "none";
+            document.getElementById('downloadButton').style.display = "none";
+            selectModel('normal'); // Reset model selection to normal
+        };
+
+        // Dark mode toggle
+        document.getElementById('toggleDarkMode').onclick = function() {
+            const appContainer = document.getElementById('appContainer');
+            const header = document.getElementById('header');
+            appContainer.classList.toggle('dark-mode');
+            const isDarkMode = appContainer.classList.contains('dark-mode');
+            header.style.color = isDarkMode ? 'white' : '#333'; // Change header color
+            this.innerText = isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+        };
+    </script>
+</body>
+</html>
