@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dictionary App</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            overflow-y: auto;
+        }
+        body.dark-mode {
+            background-color: #1c1c1c;
+        }
+        .container {
+            margin-top: 80px;
+            max-width: 900px;
+            padding-bottom: 100px; /* To ensure content does not overlap footer */
+        }
+        .input-group {
+            position: sticky;
+            top: 20px;
+            z-index: 1000;
+        }
+        .input-group input {
+            height: 55px;
+            font-size: 1.2rem;
+            border-radius: 30px 0 0 30px;
+            border: 2px solid #007bff;
+            transition: border 0.3s ease;
+        }
+        .input-group input:focus {
+            border-color: #0056b3;
+        }
+        .input-group button {
+            height: 55px;
+            font-size: 1.1rem;
+            border-radius: 0 30px 30px 0;
+            background-color: #007bff;
+            color: white;
+            border: none;
+        }
+        .input-group button:hover {
+            background-color: #0056b3;
+        }
+        .suggestions {
+            background: white;
+            color: #333;
+            border-radius: 5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
+            max-height: 250px;
+            overflow-y: auto;
+            position: absolute;
+            width: 100%;
+            z-index: 500;
+        }
+        .suggestion-item {
+            padding: 12px;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+        .suggestion-item:hover {
+            background: #f1f1f1;
+        }
+        .results {
+            margin-top: 30px;
+            overflow-y: auto;
+        }
+        .card {
+            background: rgba(0, 0, 0, 0.05);
+            border: none;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        .card-header {
+            background: #007bff;
+            color: white;
+            font-weight: bold;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        .card-body {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+        footer {
+            background: #007bff;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        .dark-mode-toggle {
+            cursor: pointer;
+            background: #007bff;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            color: white;
+            font-size: 1.2rem;
+            transition: background 0.3s ease;
+        }
+        .dark-mode-toggle:hover {
+            background: #0056b3;
+        }
+        .spinner-border {
+            width: 40px;
+            height: 40px;
+            border-width: 4px;
+            border-color: #007bff;
+        }
+        .history {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+            color: skyblue;
+        }
+        .history ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .history li {
+            padding: 8px;
+            cursor: pointer;
+        }
+        .history li:hover {
+            background-color: #007bff;
+            color: white;
+        }
+        .voice-search {
+            cursor: pointer;
+            background-color: transparent;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            color: white;
+            font-size: 1.2rem;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+        .voice-search:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="d-flex justify-content-between mb-4">
+        <h1 class="display-4 text-primary">Dictionary</h1>
+    <button class="dark-mode-toggle" id="darkModeToggle">🌙 Dark Mode</button>
+    </div>
+
+    <div class="input-group mb-4">
+        <input type="text" id="wordInput" class="form-control" placeholder="Enter a word 💮️">
+        <button class="btn btn-primary" id="searchBtn">Search</button>
+    </div>
+
+<button class="voice-search" id="voiceSearchBtn">🎤</button>
+
+    <!-- Suggestions -->
+    <div id="suggestions" class="suggestions"></div>
+
+    <!-- Search History -->
+    
+
+    <!-- Results -->
+    <div id="results" class="results"></div>
+<div id="searchHistory" class="history"></div>
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="text-center d-none">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer>
+    <p>&copy; 2024 Made By Tanish Kshatriya</p>
+</footer>
+
+<!-- Bootstrap JS and Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
+<!-- Dictionary API Script -->
+<script>
+    const searchBtn = document.getElementById('searchBtn');
+    const wordInput = document.getElementById('wordInput');
+    const resultsDiv = document.getElementById('results');
+    const suggestionsDiv = document.getElementById('suggestions');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const searchHistoryDiv = document.getElementById('searchHistory');
+    const voiceSearchBtn = document.getElementById('voiceSearchBtn');
+
+    let searchHistory = [];
+
+    // Dark Mode Toggle
+    darkModeToggle.addEventListener('click', function () {
+        document.body.classList.toggle('dark-mode');
+    });
+
+    // Voice Search functionality
+    voiceSearchBtn.addEventListener('click', function () {
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'en-US';
+        recognition.start();
+        recognition.onresult = function(event) {
+            const word = event.results[0][0].transcript;
+            wordInput.value = word;
+            searchWordMeaning(word);
+        };
+    });
+
+  wordInput.addEventListener('input', function () {
+    const query = wordInput.value.trim();
+    if (query.length > 0) {
+        fetch(`https://api.datamuse.com/sug?s=${query}`)
+            .then(response => response.json())
+            .then(suggestions => {
+                suggestionsDiv.innerHTML = suggestions.map(suggestion => `
+                    <div class="suggestion-item" onclick="selectSuggestion('${suggestion.word}')">${suggestion.word}</div>
+                `).join('');
+            });
+    } else {
+        suggestionsDiv.innerHTML = '';
+    }
+});
+
+// New function to handle selecting a suggestion
+function selectSuggestion(word) {
+    wordInput.value = word;
+    searchWord(word);
+    suggestionsDiv.innerHTML = '';  // Hide suggestions after selecting one
+}
+
+  
+
+    function searchWord(word) {
+        showLoading(true);
+        fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
+            .then(response => response.json())
+            .then(data => {
+                showLoading(false);
+                displayResults(data);
+                addToSearchHistory(word);
+            })
+            .catch(error => {
+                showLoading(false);
+                resultsDiv.innerHTML = '<p class="text-danger">No definition found!</p>';
+            });
+    }
+
+    function displayResults(data) {
+        resultsDiv.innerHTML = data.map(entry => {
+            const word = entry.word;
+            const meaning = entry.meanings.map(meaning => `
+                <div class="card">
+                    <div class="card-header">${meaning.partOfSpeech}</div>
+                    <div class="card-body">${meaning.definitions.map(def => `<p>${def.definition}</p>`).join('')}</div>
+                </div>
+            `).join('');
+            return meaning;
+        }).join('');
+    }
+
+    function showLoading(isLoading) {
+        if (isLoading) {
+            loadingSpinner.classList.remove('d-none');
+        } else {
+            loadingSpinner.classList.add('d-none');
+        }
+    }
+
+    function addToSearchHistory(word) {
+        if (!searchHistory.includes(word)) {
+            searchHistory.push(word);
+            searchHistoryDiv.innerHTML = `
+                <h5>Search History</h5>
+                <ul>
+                    ${searchHistory.map(item => `<li onclick="searchWord('${item}')">${item}</li>`).join('')}
+                </ul>
+            `;
+        }
+    }
+
+    searchBtn.addEventListener('click', function () {
+        const word = wordInput.value.trim();
+        if (word) {
+            searchWordMeaning(word);
+        }
+    });
+
+    function searchWordMeaning(word) {
+        searchWord(word);
+    }
+</script>
+</body>
+</html>
