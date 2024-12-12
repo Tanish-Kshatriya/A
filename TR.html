@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JARVIS Protocol</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: black;
+            color: #00FF00;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .terminal {
+            background-color: black;
+            border: 1px solid #00FF00;
+            padding: 20px;
+            height: 80vh;
+            overflow-y: auto;
+            margin-top: 30px;
+        }
+        .terminal p {
+            margin: 0;
+            white-space: pre-wrap;
+        }
+        .heading {
+            text-align: center;
+            color: #00FF00;
+            font-size: 36px;
+            margin-top: 50px;
+        }
+        .run-button {
+            display: block;
+            margin: 30px auto;
+            background-color: #00FF00;
+            color: black;
+            border: none;
+            padding: 10px 30px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .run-button:hover {
+            background-color: #32FF32;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="heading">JARVIS By Tanish Kshatriya</div>
+                <button class="run-button" id="runButton">Rani Click This!</button>
+                <div class="terminal" id="terminal">
+                    <!-- Text will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const text = [
+            "Initializing JARVIS Protocol...",
+            "Bypassing firewall...",
+            "Accessing server at IP: 192.168.0.101...",
+            "Connection secured. Encrypting data streams...",
+            "Locating target: Prahlad Kumawat...",
+            "Phone number identified: +91-8765432109",
+            "Retrieving call logs...",
+            "Call logs retrieved successfully.",
+            "Scanning messages...",
+            "450 messages extracted.",
+            "Filtering spam messages...",
+            "200 spam messages detected and extracted.",
+            "Analyzing spam message patterns...",
+            "Top spam keywords found: 'Cheap loans', 'Free money', 'Congrats, you won!'",
+            "Tracking GPS coordinates...",
+            "Current location: Mumbai, Maharashtra, India",
+            "Accessing photo gallery...",
+            "Photos downloaded: 175",
+            "Scanning financial records...",
+            "Bank account linked: ICICI Bank",
+            "Recent transactions: ₹18,500 credited on 10/12/2024",
+            "Recent transactions: ₹5,000 debited on 10/12/2024",
+            "Accessing vehicle details...",
+            "Last public vehicle ride: 15/11/2024 - Mumbai Local Train, Dadar to Churchgate",
+            "Last private vehicle ride: 14/11/2024 - Uber, Mumbai to Andheri",
+            "Last payment made: ₹300 for Uber ride",
+            "Social media accounts hacked: Twitter, LinkedIn, Facebook",
+            "Email accounts linked: prahladkumawat@gmail.com, prahlad_spammer@outlook.com",
+            "Last email sent: 'Earn $1000 in 24 hours!'",
+            "Tracking email activity...",
+            "10,000 spam emails sent in the past week.",
+            "Accessing social media accounts...",
+            "Facebook account activity: Sent 200 friend requests, liked 1000 posts.",
+            "Instagram account activity: Followed 5000 accounts, posted 50 spammy ads.",
+            "Twitter activity: Followed 7000 accounts in 24 hours.",
+            "LinkedIn activity: Endorsed skills for 300 random people.",
+            "Accessing browsing history...",
+            "Top visited websites: 'www.free-money.com', 'www.cheap-loans.in', 'www.get-rich-quick.org'",
+            "Browsing session logs: 15:32 - Visited 'www.free-money.com', 15:45 - Visited 'www.get-rich-quick.org'",
+            "Last shopping transaction: Amazon - ₹1,200 for 'Best Loan Offers Book'",
+            "Last public location: Dadar, Mumbai",
+            "Last known IP address: 192.168.0.101",
+            "Accessing bank statements...",
+            "Statement for ICICI Bank: ₹5,000 credited on 12/11/2024, ₹18,500 debited on 10/12/2024",
+            "Scanning documents...",
+            "Aadhar Card scanned: [Image file - Aadhar_Image.jpg]",
+            "Data extraction complete.",
+            "Closing all sessions to avoid detection... Phone Successfully Blasted",
+            "Process terminated. System secure."
+        ];
+
+        let i = 0;
+        let j = 0;
+        const terminal = document.getElementById("terminal");
+        const runButton = document.getElementById("runButton");
+
+        function typeText() {
+            if (i < text.length) {
+                if (j < text[i].length) {
+                    terminal.innerHTML += text[i][j];
+                    j++;
+                    setTimeout(typeText, Math.random() * (20 - 6) + 6);  // Random typing speed
+                } else {
+                    terminal.innerHTML += "<br>"; // Move to the next line
+                    i++;
+                    j = 0;
+                    setTimeout(typeText, 100); // Delay before starting the next line
+                }
+            } else {
+                terminal.innerHTML += "<br><br>Process complete.";
+            }
+        }
+
+        runButton.addEventListener("click", function() {
+            terminal.innerHTML = ""; // Clear terminal before starting
+            typeText();
+        });
+    </script>
+</body>
+</html>
