@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JARVIS (Satellite Panel)</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #0a0a0a;
+            color: #ff3333;
+            font-family: 'Courier New', Courier, monospace;
+            animation: backgroundPulse 2s infinite alternate;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(90deg, #ff000003 1px, transparent 1px) 0 0 / 20px 20px,
+                linear-gradient(0deg, #ff000003 1px, transparent 1px) 0 0 / 20px 20px;
+            animation: gridMove 20s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(20px); }
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 4rem;
+            color: #ff0000;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            animation: glitchText 2s infinite;
+            text-shadow: 
+                0 0 10px #ff0000,
+                0 0 20px #ff0000,
+                0 0 30px #ff0000;
+            margin-bottom: 30px;
+        }
+
+        @keyframes glitchText {
+            0% { transform: skew(0deg); }
+            20% { transform: skew(-2deg); filter: hue-rotate(0deg); }
+            40% { transform: skew(2deg); filter: hue-rotate(90deg); }
+            60% { transform: skew(-1deg); filter: hue-rotate(180deg); }
+            80% { transform: skew(1deg); filter: hue-rotate(270deg); }
+            100% { transform: skew(0deg); filter: hue-rotate(360deg); }
+        }
+
+        .container {
+            margin-top: 50px;
+            position: relative;
+        }
+
+        .satellite {
+            border: 2px solid #ff3333;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            background: linear-gradient(45deg, #1a1a1a, #000000);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .satellite::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 0%,
+                rgba(255, 0, 0, 0.1) 45%,
+                rgba(255, 0, 0, 0.2) 50%,
+                rgba(255, 0, 0, 0.1) 55%,
+                transparent 100%
+            );
+            animation: shine 3s infinite;
+        }
+
+        .satellite:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 
+                0 0 20px rgba(255, 0, 0, 0.3),
+                0 0 40px rgba(255, 0, 0, 0.2),
+                0 0 60px rgba(255, 0, 0, 0.1);
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .satellite-info {
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .status {
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+            animation: statusPulse 1.5s infinite;
+        }
+
+        .status-active {
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00;
+        }
+
+        .status-offline {
+            color: #ff0000;
+            text-shadow: 0 0 10px #ff0000;
+        }
+
+        .status-hacked {
+            color: #ff00ff;
+            text-shadow: 0 0 10px #ff00ff;
+            animation: hackedGlitch 0.3s infinite;
+        }
+
+        @keyframes hackedGlitch {
+            0% { opacity: 1; transform: translate(0); }
+            25% { opacity: 0.8; transform: translate(-2px, 2px); }
+            50% { opacity: 0.9; transform: translate(2px, -2px); }
+            75% { opacity: 0.7; transform: translate(-1px, 1px); }
+            100% { opacity: 1; transform: translate(0); }
+        }
+
+        @keyframes statusPulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 100px;
+            padding: 20px;
+            border-top: 2px solid #ff3333;
+            background: linear-gradient(0deg, #000000, transparent);
+        }
+
+        .footer p {
+            font-size: 1.5rem;
+            color: #ff6666;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin: 0;
+            animation: footerGlow 2s infinite alternate;
+        }
+
+        @keyframes footerGlow {
+            0% { text-shadow: 0 0 10px #ff3333, 0 0 20px #ff3333, 0 0 30px #ff3333; }
+            100% { text-shadow: 0 0 20px #ff3333, 0 0 40px #ff3333, 0 0 60px #ff3333; }
+        }
+
+        /* Matrix rain effect */
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        /* Scanning line effect */
+        .scan-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(255, 0, 0, 0.3);
+            animation: scan 2s linear infinite;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
+        }
+    </style>
+</head>
+<body>
+    <div class="scan-line"></div>
+    <canvas class="matrix-bg" id="matrixCanvas"></canvas>
+    
+    <div class="container">
+        <h1>H47『/』Tanish</h1>
+        <div class="row">
+          <p class="footer">Matrix of Satellite.</p>
+            <!-- Satellite #1 -->
+<div class="container">
+    <!-- Satellite #1 -->
+    <div class="col-12">
+        <div class="satellite">
+            <h3>Satellite #1: Alpha-1</h3>
+            <div class="satellite-info">
+                <p><span class="status">Current Status: Active</span></p>
+                <p>Location: 45° N, 70° W</p>
+                <p>Control Access: Full</p>
+                <p>Last Command: Communication - Established</p>
+                <p>Encryption Status: Secured</p>
+                <p>Hacking Date: N/A</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Satellite #2 -->
+    <div class="col-12">
+        <div class="satellite">
+            <h3>Satellite #2: Bravo-2</h3>
+            <div class="satellite-info">
+                <p><span class="status">Current Status: Offline</span></p>
+                <p>Location: 15° S, 45° E</p>
+                <p>Control Access: Limited</p>
+                <p>Last Command: Data Transmission - Failed</p>
+                <p>Encryption Status: Secure</p>
+                <p>Hacking Date: N/A</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Satellite #3 -->
+    <div class="col-12">
+        <div class="satellite">
+            <h3>Satellite #3: Charlie-3</h3>
+            <div class="satellite-info">
+                <p><span class="status">Current Status: Hacked</span></p>
+                <p>Location: 85° N, 170° E</p>
+                <p>Control Access: Full</p>
+                <p>Last Command: Signal Jam - Initiated</p>
+                <p>Encryption Status: Compromised</p>
+                <p>Hacking Date: 2024-12-12 04:00 UTC</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Satellite #4 -->
+    <div class="col-12">
+        <div class="satellite">
+            <h3>Satellite #4: Delta-4</h3>
+            <div class="satellite-info">
+                <p><span class="status">Current Status: Active</span></p>
+                <p>Location: 12° N, 68° E</p>
+                <p>Control Access: Full</p>
+                <p>Last Command: Communication - Established</p>
+                <p>Encryption Status: Secured</p>
+                <p>Hacking Date: N/A</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Satellite #5 -->
+    <div class="col-12">
+        <div class="satellite">
+            <h3>Satellite #5: Echo-5</h3>
+            <div class="satellite-info">
+                <p><span class="status">Current Status: Offline</span></p>
+                <p>Location: 25° S, 50° W</p>
+                <p>Control Access: Limited</p>
+                <p>Last Command: Data Transmission - Failed</p>
+                <p>Encryption Status: Secure</p>
+                <p>Hacking Date: N/A</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Satellite #6 -->
+    <div class="col-12">
+        <div class="satellite">
+            <h3>Satellite #6: Foxtrot-6</h3>
+            <div class="satellite-info">
+                <p><span class="status">Current Status: Hacked</span></p>
+                <p>Location: 60° N, 120° W</p>
+                <p>Control Access: Full</p>
+                <p>Last Command: Signal Jam - Initiated</p>
+                <p>Encryption Status: Compromised</p>
+                <p>Hacking Date: 2024-12-16 10:15 UTC</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Satellite #7 -->
+    <div class="col-12">
+        <div class="satellite">
+            <h3>Satellite #7: Golf-7</h3>
+            <div class="satellite-info">
+                <p><span class="status">Current Status: Active</span></p>
+                <p>Location: 35° S, 70° E</p>
+                <p>Control Access: Full</p>
+                <p>Last Command: Communication - Established</p>
+                <p>Encryption Status: Secured</p>
+                <p>Hacking Date: N/A</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Satellite #8 -->
+    <div class="col-12">
+        <div class="satellite">
+            <h3>Satellite #8: Hotel-8</h3>
+            <div class="satellite-info">
+                <p><span class="status">Current Status: Offline</span></p>
+                <p>Location: 40° N, 45° W</p>
+                <p>Control Access: Limited</p>
+                <p>Last Command: Data Transmission - Failed</p>
+                <p>Encryption Status: Secure</p>
+                <p>Hacking Date: N/A</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Satellite #9 -->
+    <div class="col-12">
+        <div class="satellite">
+            <h3>Satellite #9: India-9</h3>
+            <div class="satellite-info">
+                <p><span class="status">Current Status: Active</span></p>
+                <p>Location: 30° N, 100° E</p>
+                <p>Control Access: Full</p>
+                <p>Last Command: Communication - Established</p>
+                <p>Encryption Status: Secured</p>
+                <p>Hacking Date: N/A</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Satellite #10 -->
+    <div class="col-12">
+        <div class="satellite">
+            <h3>Satellite #10: Juliet-10</h3>
+            <div class="satellite-info">
+                <p><span class="status">Current Status: Hacked</span></p>
+                <p>Location: 110° W, 30° N</p>
+                <p>Control Access: Full</p>
+                <p>Last Command: Signal Jam - Initiated</p>
+                <p>Encryption Status: Compromised</p>
+                <p>Hacking Date: 2024-12-16 06:15 UTC</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Satellite #11 -->
+    <div class="col-12">
+        <div class="satellite">
+            <h3>Satellite #11: Kilo-11</h3>
+            <div class="satellite-info">
+                <p><span class="status">Current Status: Active</span></p>
+                <p>Location: 50° N, 20° W</p>
+                <p>Control Access: Full</p>
+                <p>Last Command: Communication - Established</p>
+                <p>Encryption Status: Secured</p>
+                <p>Hacking Date: N/A</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Satellite #12 -->
+    <div class="col-12">
+        <div class="satellite">
+            <h3>Satellite #12: Lima-12</h3>
+            <div class="satellite-info">
+                <p><span class="status">Current Status: Offline</span></p>
+                <p>Location: 25° N, 45° E</p>
+                <p>Control Access: Limited</p>
+                <p>Last Command: Data Transmission - Failed</p>
+                <p>Encryption Status: Secure</p>
+                <p>Hacking Date: N/A</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Satellite #13 -->
+    <div class="col-12">
+        <div class="satellite">
+            <h3>Satellite #13: Mike-13</h3>
+            <div class="satellite-info">
+                <p><span class="status">Current Status: Active</span></p>
+                <p>Location: 15° N, 75° E</p>
+                <p>Control Access: Full</p>
+                <p>Last Command: Communication - Established</p>
+                <p>Encryption Status: Secured</p>
+                <p>Hacking Date: N/A</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Satellite #14 -->
+    <div class="col-12">
+        <div class="satellite">
+            <h3>Satellite #14: November-14</h3>
+            <div class="satellite-info">
+                <p><span class="status">Current Status: Offline</span></p>
+                <p>Location: 60° N, 90° E</p>
+                <p>Control Access: Limited</p>
+                <p>Last Command: Data Transmission - Failed</p>
+                <p>Encryption Status: Secure</p>
+                <p>Hacking Date: N/A</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Satellite #15 -->
+    <div class="col-12">
+        <div class="satellite">
+            <h3>Satellite #15: Oscar-15</h3>
+            <div class="satellite-info">
+                <p><span class="status">Current Status: Hacked</span></p>
+                <p>Location: 45° N, 100° W</p>
+                <p>Control Access: Full</p>
+                <p>Last Command: Signal Jam - Initiated</p>
+                <p>Encryption Status: Compromised</p>
+                <p>Hacking Date: 2024-12-13 09:00 UTC</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Satellite #16 -->
+    <div class="col-12">
+        <div class="satellite">
+            <h3>Satellite #16: Papa-16</h3>
+            <div class="satellite-info">
+                <p><span class="status">Current Status: Active</span></p>
+                <p>Location: 35° N, 60° W</p>
+                <p>Control Access: Full</p>
+                <p>Last Command: Communication - Established</p>
+                <p>Encryption Status: Secured</p>
+                <p>Hacking Date: N/A</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Satellite #17 -->
+    <div class="col-12">
+        <div class="satellite">
+            <h3>Satellite #17: Quebec-17</h3>
+            <div class="satellite-info">
+                <p><span class="status">Current Status: Offline</span></p>
+                <p>Location: 20° S, 90° E</p>
+                <p>Control Access: Limited</p>
+                <p>Last Command: Data Transmission - Failed</p>
+                <p>Encryption Status: Secure</p>
+                <p>Hacking Date: N/A</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Satellite #18 -->
+    <div class="col-12">
+        <div class="satellite">
+            <h3>Satellite #18: Romeo-18</h3>
+            <div class="satellite-info">
+                <p><span class="status">Current Status: Active</span></p>
+                <p>Location: 50° N, 70° E</p>
+                <p>Control Access: Full</p>
+                <p>Last Command: Communication - Established</p>
+                <p>Encryption Status: Secured</p>
+                <p>Hacking Date: N/A</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Satellite #19 -->
+    <div class="col-12">
+        <div class="satellite">
+            <h3>Satellite #19: Sierra-19</h3>
+            <div class="satellite-info">
+                <p><span class="status">Current Status: Hacked</span></p>
+                <p>Location: 30° S, 100° W</p>
+                <p>Control Access: Full</p>
+                <p>Last Command: Signal Jam - Initiated</p>
+                <p>Encryption Status: Compromised</p>
+                <p>Hacking Date: 2024-12-14 03:30 UTC</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Satellite #20 -->
+    <div class="col-12">
+        <div class="satellite">
+            <h3>Satellite #20: Tango-20</h3>
+            <div class="satellite-info">
+                <p><span class="status">Current Status: Active</span></p>
+                <p>Location: 60° S, 120° W</p>
+                <p>Control Access: Full</p>
+                <p>Last Command: Communication - Established</p>
+                <p>Encryption Status: Secured</p>
+                <p>Hacking Date: N/A</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Satellite #21 -->
+    <div class="col-12">
+        <div class="satellite">
+            <h3>Satellite #21: Uniform-21</h3>
+            <div class="satellite-info">
+                <p><span class="status">Current Status: Offline</span></p>
+                <p>Location: 40° N, 110° W</p>
+                <p>Control Access: Limited</p>
+                <p>Last Command: Data Transmission - Failed</p>
+                <p>Encryption Status: Secure</p>
+                <p>Hacking Date: N/A</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Satellite #22 -->
+    <div class="col-12">
+        <div class="satellite">
+            <h3>Satellite #22: Victor-22</h3>
+            <div class="satellite-info">
+                <p><span class="status">Current Status: Active</span></p>
+                <p>Location: 15° N, 110° E</p>
+                <p>Control Access: Full</p>
+                <p>Last Command: Communication - Established</p>
+                <p>Encryption Status: Secured</p>
+                <p>Hacking Date: N/A</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Satellite #23 -->
+    <div class="col-12">
+        <div class="satellite">
+            <h3>Satellite #23: Whiskey-23</h3>
+            <div class="satellite-info">
+                <p><span class="status">Current Status: Hacked</span></p>
+                <p>Location: 70° N, 45° W</p>
+                <p>Control Access: Full</p>
+                <p>Last Command: Signal Jam - Initiated</p>
+                <p>Encryption Status: Compromised</p>
+                <p>Hacking Date: 2024-12-16 08:30 UTC</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Satellite #24 -->
+    <div class="col-12">
+        <div class="satellite">
+            <h3>Satellite #24: X-ray-24</h3>
+            <div class="satellite-info">
+                <p><span class="status">Current Status: Active</span></p>
+                <p>Location: 50° N, 150° E</p>
+                <p>Control Access: Full</p>
+                <p>Last Command: Communication - Established</p>
+                <p>Encryption Status: Secured</p>
+                <p>Hacking Date: N/A</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Satellite #25 -->
+    <div class="col-12">
+        <div class="satellite">
+            <h3>Satellite #25: Yankee-25</h3>
+            <div class="satellite-info">
+                <p><span class="status">Current Status: Offline</span></p>
+                <p>Location: 35° S, 100° E</p>
+                <p>Control Access: Limited</p>
+                <p>Last Command: Data Transmission - Failed</p>
+                <p>Encryption Status: Secure</p>
+                <p>Hacking Date: N/A</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Satellite #26 -->
+    <div class="col-12">
+        <div class="satellite">
+            <h3>Satellite #26: Zulu-26</h3>
+            <div class="satellite-info">
+                <p><span class="status">Current Status: Active</span></p>
+                <p>Location: 10° S, 130° W</p>
+                <p>Control Access: Full</p>
+                <p>Last Command: Communication - Established</p>
+                <p>Encryption Status: Secured</p>
+                <p>Hacking Date: N/A</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Satellite #27 -->
+    <div class="col-12">
+        <div class="satellite">
+            <h3>Satellite #27: Alpha-27</h3>
+            <div class="satellite-info">
+                <p><span class="status">Current Status: Hacked</span></p>
+                <p>Location: 25° N, 160° E</p>
+                <p>Control Access: Full</p>
+                <p>Last Command: Signal Jam - Initiated</p>
+                <p>Encryption Status: Compromised</p>
+                <p>Hacking Date: 2024-12-12 11:00 UTC</p>
+            </div>
+        </div>
+    </div>
+
+            <!-- Additional satellites would follow the same pattern -->
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>JARVIS by Tanish Kshatriya</p>
+    </div>
+
+    <script>
+        // Matrix rain effect
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()';
+        const charArray = chars.split('');
+        const fontSize = 10;
+        const columns = canvas.width / fontSize;
+
+        const drops = [];
+        for (let i = 0; i < columns; i++) {
+            drops[i] = 1;
+        }
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#ff0000';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = charArray[Math.floor(Math.random() * charArray.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 50);
+
+        // Responsive canvas
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+</body>
+          </html>
