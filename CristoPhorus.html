@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      background: #0a0a0f;
+      color: #00ffff;
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      position: relative;
+      grid-column: 1 / -1;
+    }
+    
+    .title {
+      font-size: 2.5em;
+      color: #00ffff;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    }
+    
+    .status-bar {
+      background: rgba(0, 255, 255, 0.1);
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 30px;
+    }
+    
+    .metric {
+      background: rgba(0, 255, 255, 0.05);
+      border: 1px solid #00ffff;
+      padding: 20px;
+      border-radius: 5px;
+      position: relative;
+      overflow: hidden;
+      min-height: 200px;
+    }
+    
+    .metric::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, #00ffff, transparent);
+      animation: scan 2s linear infinite;
+    }
+    
+    .metric h3 {
+      color: #fff;
+      margin-top: 0;
+      font-size: 1.2em;
+      border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+      padding-bottom: 10px;
+    }
+    
+    .value {
+      font-family: monospace;
+      color: #00ffff;
+      font-size: 1.1em;
+    }
+    
+    .warning { color: #ff3e3e; }
+    .success { color: #00ff00; }
+    .alert { color: #ffaa00; }
+    
+    @keyframes scan {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    
+    .pulse {
+      position: absolute;
+      top: 50%;
+      right: 20px;
+      width: 10px;
+      height: 10px;
+      background: #00ffff;
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.5); opacity: 0.5; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .calculation {
+      font-size: 0.9em;
+      margin-top: 10px;
+      padding: 5px;
+      background: rgba(0, 255, 255, 0.1);
+      border-radius: 3px;
+    }
+
+    .fluctuation {
+      display: inline-block;
+      animation: fluctuate 3s ease-in-out infinite;
+    }
+
+    @keyframes fluctuate {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-2px); }
+      100% { transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1 class="title">Mr. Tanish Kshatriya - Quantum Kryptonine 『CristoPhorus』</h1>
+      <div class="status-bar">
+        SYSTEM STATUS: OPERATIONAL - QUANTUM FLUCTUATIONS DETECTED
+        <div class="pulse"></div>
+      </div>
+    </div>
+
+    <div class="metric">
+      <h3>Quantum Vacuum Fluctuations</h3>
+      <div class="value">
+        Planck Scale Deviation: 3.14159 × 10^-35 m<br>
+        Zero-Point Energy: 4.7 × 10^9 J/m³<br>
+        <div class="calculation">
+          ΔE = ℏ/2Δt = 3.3 × 10^-34 J·s
+        </div>
+      </div>
+    </div>
+
+    <div class="metric">
+      <h3>Spacetime Curvature Analysis</h3>
+      <div class="value">
+        Ricci Scalar: R = 2.718 × 10^26 m⁻²<br>
+        Kretschmann Invariant: K = 1.414 × 10^52 m⁻⁴<br>
+        <div class="calculation">
+          Rμν - (1/2)Rgμν = 8πG/c⁴ Tμν
+        </div>
+      </div>
+    </div>
+
+    <div class="metric alert">
+      <h3>Quantum Entanglement Matrix</h3>
+      <div class="value">
+        Bell State Φ⁺: |00⟩ + |11⟩ / √2<br>
+        Coherence Time: 1.618 × 10^-3 s<br>
+        <div class="calculation">
+          ρ = |ψ⟩⟨ψ| = 0.5(|00⟩⟨00| + |11⟩⟨11|)
+        </div>
+      </div>
+    </div>
+
+    <div class="metric">
+      <h3>String Theory Vibrations</h3>
+      <div class="value">
+        Calabi-Yau Manifold: 6D<br>
+        String Tension: 1.23 × 10^44 N<br>
+        <div class="calculation">
+          T = 1/(2πα') = 2.3 × 10^43 GeV²
+        </div>
+      </div>
+    </div>
+
+    <div class="metric success">
+      <h3>Dark Energy Flux</h3>
+      <div class="value">
+        Vacuum Energy Density: 6.022 × 10^-10 J/m³<br>
+        Expansion Rate: 72.1 km/s/Mpc<br>
+        <div class="calculation">
+          Λ = 3H²/c² = 1.089 × 10^-52 m⁻²
+        </div>
+      </div>
+    </div>
+
+    <div class="metric warning">
+      <h3>Quantum Chromodynamics</h3>
+      <div class="value">
+        Quark Confinement: Active<br>
+        Strong Coupling: αs = 0.1184<br>
+        <div class="calculation">
+          ΛQCD = 217 ± 25 MeV
+        </div>
+      </div>
+    </div>
+
+    <div class="metric">
+      <h3>Higgs Field Modulation</h3>
+      <div class="value">
+        Vacuum Expectation: 246 GeV<br>
+        Field Strength: 4.7 × 10^11 V/m<br>
+        <div class="calculation">
+          mH = √(2λ)v = 125.18 GeV
+        </div>
+      </div>
+    </div>
+
+    <div class="metric alert">
+      <h3>Quantum Tunneling Probability</h3>
+      <div class="value">
+        Barrier Height: 5.34 × 10^-19 J<br>
+        Transmission Rate: 0.0314159<br>
+        <div class="calculation">
+          T = e^(-2L√(2mE)/ℏ)
+        </div>
+      </div>
+    </div>
+
+    <div class="metric">
+      <h3>Supersymmetry Breaking</h3>
+      <div class="value">
+        SUSY Scale: 2.998 × 10^16 GeV<br>
+        Gaugino Mass: 1.732 × 10^3 GeV<br>
+        <div class="calculation">
+          ⟨F⟩ = √3 × 10^11 GeV²
+        </div>
+      </div>
+    </div>
+
+    <div class="metric success">
+      <h3>Planck Scale Dynamics</h3>
+      <div class="value">
+        Quantum Gravity: G = 6.674 × 10^-11 m³/kg·s²<br>
+        Planck Length: 1.616 × 10^-35 m<br>
+        <div class="calculation">
+          lp = √(ℏG/c³)
+        </div>
+      </div>
+    </div>
+
+    <div class="metric">
+      <h3>Brane Cosmology</h3>
+      <div class="value">
+        Membrane Tension: 9.81 × 10^43 N/m²<br>
+        Extra Dimensions: 7<br>
+        <div class="calculation">
+          S = -T ∫d^p+1σ √(-det(gαβ + Bαβ))
+        </div>
+      </div>
+    </div>
+
+    <div class="metric warning">
+      <h3>Quantum Phase Transition</h3>
+      <div class="value">
+        Critical Point: Tc = 2.71828 K<br>
+        Order Parameter: φ = 0.577<br>
+        <div class="calculation">
+          ξ ∝ |t|^-ν, t = (T-Tc)/Tc
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function updateRandomValues() {
+      const values = document.querySelectorAll('.value');
+      values.forEach(value => {
+        const numbers = value.innerHTML.match(/\d+\.\d+/g);
+        if (numbers) {
+          numbers.forEach(num => {
+            const fluctuation = (Math.random() - 0.5) * 0.01;
+            const newNum = (parseFloat(num) * (1 + fluctuation)).toFixed(4);
+            value.innerHTML = value.innerHTML.replace(num, newNum);
+          });
+        }
+      });
+    }
+
+    // Update values every 2 seconds
+    setInterval(updateRandomValues, 2000);
+  </script>
+</body>
+</html>
