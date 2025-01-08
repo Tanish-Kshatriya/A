@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Copy Movie Links</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .link-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .link-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            cursor: pointer;
+            width: 80%;
+            max-width: 400px;
+            text-align: left;
+        }
+        .link-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Copy Movie Links</h1>
+    <div class="link-container">
+        <button class="link-button" onclick="copyLink('https://archive.org/download/VideshiPicturesStartWithT2/Transformers_2007_1080_Hindi_6CH_English_6CH_Action_Sci-Fi.mp4')">Transformers (2007)</button>
+        <button class="link-button" onclick="copyLink('https://archive.org/download/VideshiPicturesStartWithV1/Venom_2018_1080_Hindi_6CH_English_6CH_Action_Sci-Fi.mp4')">Venom (2018)</button>
+        <button class="link-button" onclick="copyLink('https://archive.org/download/VideshiPicturesStartWithT1/The_Dictator_2012_1080_Hindi_6CH_Eng_6CH_Comedy.mp4')">The Dictator (2012)</button>
+        <button class="link-button" onclick="copyLink('https://archive.org/download/VideshiPicturesStartWithS1/Sherlock_Holmes_2_A_Game_of_Shadows_2011_1080_Hindi_2CH_Eng_6CH_Adventure_Mystery.mp4')">Sherlock Holmes 2 (2011)</button>
+        <button class="link-button" onclick="copyLink('https://archive.org/download/VideshiPicturesStartWithS1/Sherlock_Holmes_2009_1080_Hindi_2CH_Eng_6CH_Adventure_Mystery.mp4')">Sherlock Holmes (2009)</button>
+        <button class="link-button" onclick="copyLink('https://archive.org/download/VideshiPicturesStartWithR1/Ratatouille_2007_1080_Hindi_6CH_English_6CH_Animation_Family.mp4')">Ratatouille (2007)</button>
+        <button class="link-button" onclick="copyLink('https://archive.org/download/VideshiPicturesStartWithP1/Pacific_Rim_Uprising_2018_1080_Hindi_6CH_English_6CH_Action_Sci-Fi.mp4')">Pacific Rim Uprising (2018)</button>
+        <button class="link-button" onclick="copyLink('https://archive.org/download/VideshiPicturesStartWithP1/Pacific_Rim_2013_1080_Hindi_6CH_English_6CH_Action_Sci-Fi.mp4')">Pacific Rim (2013)</button>
+        <button class="link-button" onclick="copyLink('https://archive.org/download/VideshiPicturesStartWithP1/Puss_in_Boots_The_Last_Wish_2022_1080_Hindi_6CH_English_6CH_Adventure_Comedy.mp4')">Puss in Boots: The Last Wish (2022)</button>
+        <button class="link-button" onclick="copyLink('https://archive.org/download/VideshiPicturesStartWithP1/Puss_In_Boots_2011_1080_Hindi_6CH_English_6CH_Adventure_Comedy.mp4')">Puss in Boots (2011)</button>
+        <button class="link-button" onclick="copyLink('https://archive.org/download/VideshiPicturesStartWithO1/Oppenheimer_2023_1080_Hindi_6CH_English_6CH_Biography_History.mp4')">Oppenheimer (2023)</button>
+        <button class="link-button" onclick="copyLink('https://archive.org/download/VideshiPicturesStartWithM1/Meg_2_The_Trench_2023_1080_Hindi_6CH_English_6CH_Action_Sci-fi.mp4')">Meg 2: The Trench (2023)</button>
+        <button class="link-button" onclick="copyLink('https://archive.org/download/VideshiPicturesStartWithJ1/Jurassic_World_Dominion_2022_1080_Hindi_6CH_English_6CH_Action_Adventure.mp4')">Jurassic World Dominion (2022)</button>
+    </div>
+
+    <script>
+        function copyLink(url) {
+            const tempInput = document.createElement('input');
+            tempInput.value = url;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            alert('Link copied to clipboard!');
+        }
+    </script>
+</body>
+</html>
