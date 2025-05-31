@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#4a90e2" />
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Height Boost 90-Day Plan</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: black;
+    margin: 0;
+    padding: 0;
+    color: black;
+  }
+  header {
+    background: black;
+    color: white;
+    padding: 1rem 2rem;
+    text-align: center;
+  }
+  main {
+    max-width: 800px;
+    margin: 2rem auto;
+    background: white;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
+  h1, h2 {
+    margin-top: 0;
+  }
+  nav {
+    margin-bottom: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+  nav button {
+    background: #ddd;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  nav button.active {
+    background: black;
+    color: white;
+  }
+  section {
+    display: none;
+  }
+  section.active {
+    display: block;
+  }
+  ul {
+    list-style-type: square;
+    padding-left: 1.2rem;
+  }
+  .checklist label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+  }
+  .checklist input[type="checkbox"] {
+    margin-right: 0.75rem;
+    transform: scale(1.2);
+  }
+  .tracker input[type="number"] {
+    width: 60px;
+    padding: 0.3rem;
+    font-size: 1rem;
+  }
+  .tracker table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+  }
+  .tracker th, .tracker td {
+    border: 1px solid #ccc;
+    padding: 0.4rem 0.6rem;
+    text-align: center;
+  }
+  .tracker th {
+    background: #4a90e2;
+    color: white;
+  }
+  #chartContainer {
+    max-width: 700px;
+    margin: 1.5rem auto 0;
+  }
+  footer {
+    text-align: center;
+    padding: 1rem;
+    color: #777;
+    font-size: 0.9rem;
+  }
+  @media (max-width: 600px) {
+    main {
+      margin: 1rem;
+      padding: 1rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Height Boost 90-Day Plan</h1>
+</header>
+<hr>
+<main>
+  <nav>
+    <button id="btnRoutine" class="active">Daily Routine</button>
+    <button id="btnDiet">Diet Plan</button>
+    <button id="btnSleep">Posture & Sleep</button>
+    <button id="btnTracker">Height Tracker</button>
+  </nav>
+
+  <section id="sectionRoutine" class="active">
+    <h2>Daily Routine</h2>
+    <div class="checklist">
+      <label><input type="checkbox" id="task1" /> Hanging from a bar or doorframe - 3 sets x 1 min</label>
+      <label><input type="checkbox" id="task2" /> Jump rope or high knees - 5 minutes</label>
+      <label><input type="checkbox" id="task3" /> Calf raises (tiptoes) - 3 sets x 20</label>
+      <label><input type="checkbox" id="task4" /> Stretch Flow (10-15 mins): Toe Touches, Cobra Pose, Cat-Cow, Bridge Pose, Forward Fold, Wall Stretch, Neck & Shoulder Rolls</label>
+      <label><input type="checkbox" id="task5" /> Night Routine: Light stretching, Deep breathing, Visualization</label>
+    </div>
+  </section>
+
+  <section id="sectionDiet">
+    <h2>Daily Diet Plan</h2>
+    <ul>
+      <li><strong>Breakfast:</strong> 2-3 eggs, 1 banana, almonds/walnuts, 1 glass milk (cow/soy/almond)</li>
+      <li><strong>Lunch:</strong> Dal/Chole/Rajma, Paneer, brown rice/roti, salad, yogurt</li>
+      <li><strong>Snack:</strong> Peanut butter toast, fruit bowl (mango, papaya, guava), roasted chana/makhana</li>
+      <li><strong>Dinner:</strong> Light sabzi, 2 roti / 1 bowl rice, paneer or tofu, turmeric milk before bed</li>
+    </ul>
+  </section>
+
+  <section id="sectionSleep">
+    <h2>Posture & Sleep Tips</h2>
+    <ul>
+      <li>Sleep 8.5-10 hours, on your back</li>
+      <li>Use flat pillow or none</li>
+      <li>No screens 1 hour before bed</li>
+      <li>Practice wall posture (5 mins/day)</li>
+      <li>Avoid slouching during sitting/standing</li>
+    </ul>
+  </section>
+
+  <section id="sectionTracker">
+    <h2>Height Tracker (Log Weekly)</h2>
+    <form id="trackerForm" class="tracker">
+      <table>
+        <thead>
+          <tr>
+            <th>Week</th>
+            <th>Date</th>
+            <th>Your Height (inches)</th>
+          </tr>
+        </thead>
+        <tbody id="trackerBody"></tbody>
+      </table>
+      <button type="submit" style="margin-top:1rem; padding:0.5rem 1rem; background:#4a90e2; color:#fff; border:none; border-radius:5px; cursor:pointer;">Save Progress</button>
+      <button type="button" id="clearData" style="margin-top:1rem; margin-left:1rem; padding:0.5rem 1rem; background:#f44336; color:#fff; border:none; border-radius:5px; cursor:pointer;">Clear Data</button>
+    </form>
+    <div id="chartContainer">
+      <canvas id="heightChart" width="700" height="300"></canvas>
+    </div>
+  </section>
+</main>
+
+<footer>
+<pre> /  Made for CristoPhorus — || </pre>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // Tab switching
+  const tabs = ['Routine', 'Diet', 'Sleep', 'Tracker'];
+  tabs.forEach(tab => {
+    document.getElementById('btn' + tab).addEventListener('click', () => {
+      tabs.forEach(t => {
+        document.getElementById('btn' + t).classList.remove('active');
+        document.getElementById('section' + t).classList.remove('active');
+      });
+      document.getElementById('btn' + tab).classList.add('active');
+      document.getElementById('section' + tab).classList.add('active');
+    });
+  });
+
+  // Tracker logic
+  const trackerBody = document.getElementById('trackerBody');
+  const form = document.getElementById('trackerForm');
+  const clearBtn = document.getElementById('clearData');
+  const startDate = new Date();
+  startDate.setHours(0,0,0,0);
+  const weeksCount = 13;
+
+  // Create table rows for weeks and dates
+  for(let i = 0; i < weeksCount; i++){
+    const weekNum = i + 1;
+    const date = new Date(startDate.getTime());
+    date.setDate(date.getDate() + i * 7);
+    const dateStr = date.toLocaleDateString(undefined, {day:'2-digit', month:'short', year:'numeric'});
+    const row = document.createElement('tr');
+
+    const cellWeek = document.createElement('td');
+    cellWeek.textContent = `Week ${weekNum}`;
+    row.appendChild(cellWeek);
+
+    const cellDate = document.createElement('td');
+    cellDate.textContent = dateStr;
+    row.appendChild(cellDate);
+
+    const cellInput = document.createElement('td');
+    const input = document.createElement('input');
+    input.type = 'number';
+    input.min = '50';
+    input.max = '100';
+    input.step = '0.1';
+    input.name = `week${weekNum}`;
+    input.placeholder = 'e.g. 69.5';
+    cellInput.appendChild(input);
+    row.appendChild(cellInput);
+
+    trackerBody.appendChild(row);
+  }
+
+  // Load saved data
+  function loadData(){
+    for(let i = 1; i <= weeksCount; i++){
+      const val = localStorage.getItem(`height_week${i}`);
+      if(val){
+        document.querySelector(`input[name="week${i}"]`).value = val;
+      }
+    }
+  }
+
+  loadData();
+
+  // Chart setup
+  const ctx = document.getElementById('heightChart').getContext('2d');
+  let heightChart;
+
+  function updateChart(){
+    const labels = [];
+    const data = [];
+    for(let i = 1; i <= weeksCount; i++){
+      const val = parseFloat(localStorage.getItem(`height_week${i}`));
+      if(!isNaN(val)){
+        labels.push(`Week ${i}`);
+        data.push(val);
+      }
+    }
+    if(heightChart) heightChart.destroy();
+    heightChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Height (inches)',
+          data: data,
+          fill: false,
+          borderColor: '#4a90e2',
+          tension: 0.2,
+          pointRadius: 5,
+          pointBackgroundColor: '#4a90e2',
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            min: 50,
+            max: 100,
+            ticks: {
+              stepSize: 1
+            }
+          }
+        }
+      }
+    });
+  }
+
+  updateChart();
+
+  // Save form
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    for(let i = 1; i <= weeksCount; i++){
+      const input = document.querySelector(`input[name="week${i}"]`);
+      if(input.value){
+        localStorage.setItem(`height_week${i}`, input.value);
+      }
+    }
+    alert('Progress saved! Keep it up 💪');
+    updateChart();
+  });
+
+  // Clear data button
+  clearBtn.addEventListener('click', () => {
+    if(confirm('Clear all saved data?')){
+      for(let i = 1; i <= weeksCount; i++){
+        localStorage.removeItem(`height_week${i}`);
+        document.querySelector(`input[name="week${i}"]`).value = '';
+      }
+      updateChart();
+    }
+  });
+
+  // Persist checklist state locally
+  const checklistIds = ['task1','task2','task3','task4','task5'];
+
+  checklistIds.forEach(id => {
+    const cb = document.getElementById(id);
+    const saved = localStorage.getItem(id);
+    if(saved === 'true') cb.checked = true;
+    cb.addEventListener('change', () => {
+      localStorage.setItem(id, cb.checked);
+    });
+  });
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./service-worker.js')
+        .then(reg => console.log('Service Worker registered', reg))
+        .catch(err => console.log('Service Worker failed', err));
+    });
+  }
+</script>
+
+</body>
+</html>
