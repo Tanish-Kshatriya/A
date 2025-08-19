@@ -3,319 +3,808 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dictionary App</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Lexicon - Beautiful Dictionary</title>
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        html, body {
-            height: 100%;
+        * {
             margin: 0;
-            font-family: 'Poppins', sans-serif;
-            background-color: #f0f4f8;
-            color: #333;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            overflow-y: auto;
-        }
-        body.dark-mode {
-            background-color: #1c1c1c;
-        }
-        .container {
-            margin-top: 80px;
-            max-width: 900px;
-            padding-bottom: 100px; /* To ensure content does not overlap footer */
-        }
-        .input-group {
-            position: sticky;
-            top: 20px;
-            z-index: 1000;
-        }
-        .input-group input {
-            height: 55px;
-            font-size: 1.2rem;
-            border-radius: 30px 0 0 30px;
-            border: 2px solid #007bff;
-            transition: border 0.3s ease;
-        }
-        .input-group input:focus {
-            border-color: #0056b3;
-        }
-        .input-group button {
-            height: 55px;
-            font-size: 1.1rem;
-            border-radius: 0 30px 30px 0;
-            background-color: #007bff;
-            color: white;
-            border: none;
-        }
-        .input-group button:hover {
-            background-color: #0056b3;
-        }
-        .suggestions {
-            background: white;
-            color: #333;
-            border-radius: 5px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            margin-top: 10px;
-            max-height: 250px;
-            overflow-y: auto;
-            position: absolute;
-            width: 100%;
-            z-index: 500;
-        }
-        .suggestion-item {
-            padding: 12px;
-            cursor: pointer;
-            font-size: 1.1rem;
-        }
-        .suggestion-item:hover {
-            background: #f1f1f1;
-        }
-        .results {
-            margin-top: 30px;
-            overflow-y: auto;
-        }
-        .card {
-            background: rgba(0, 0, 0, 0.05);
-            border: none;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        }
-        .card-header {
-            background: #007bff;
-            color: white;
-            font-weight: bold;
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
-        }
-        .card-body {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-bottom-left-radius: 8px;
-            border-bottom-right-radius: 8px;
-        }
-        footer {
-            background: #007bff;
-            color: white;
-            text-align: center;
-            padding: 15px 0;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-        .dark-mode-toggle {
-            cursor: pointer;
-            background: #007bff;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-            color: white;
-            font-size: 1.2rem;
-            transition: background 0.3s ease;
-        }
-        .dark-mode-toggle:hover {
-            background: #0056b3;
-        }
-        .spinner-border {
-            width: 40px;
-            height: 40px;
-            border-width: 4px;
-            border-color: #007bff;
-        }
-        .history {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: rgba(0, 0, 0, 0.05);
-            border-radius: 8px;
-            color: skyblue;
-        }
-        .history ul {
-            list-style-type: none;
             padding: 0;
+            box-sizing: border-box;
         }
-        .history li {
-            padding: 8px;
-            cursor: pointer;
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --bg-primary: #f7fafc;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --shadow-strong: 0 20px 60px rgba(0, 0, 0, 0.15);
         }
-        .history li:hover {
-            background-color: #007bff;
-            color: white;
+
+        [data-theme="dark"] {
+            --text-primary: #f7fafc;
+            --text-secondary: #e2e8f0;
+            --bg-primary: #0f0f23;
+            --card-bg: rgba(26, 32, 44, 0.9);
+            --glass-bg: rgba(26, 32, 44, 0.3);
+            --glass-border: rgba(255, 255, 255, 0.1);
         }
-        .voice-search {
-            cursor: pointer;
-            background-color: transparent;
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-gradient);
+            opacity: 0.03;
+            z-index: -2;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -30px) rotate(120deg); }
+            66% { transform: translate(-20px, 20px) rotate(240deg); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: var(--accent-gradient);
+            border-radius: 2px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            font-weight: 300;
+        }
+
+        /* Search Section */
+        .search-section {
+            position: relative;
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .search-container {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-wrapper {
+            position: relative;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            box-shadow: var(--shadow-soft);
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .search-wrapper:focus-within {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-strong);
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1.5rem 5rem 1.5rem 2rem;
             border: none;
-            padding: 10px;
-            border-radius: 5px;
-            color: white;
+            background: transparent;
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: var(--text-primary);
+            outline: none;
+        }
+
+        .search-input::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.7;
+        }
+
+        .search-controls {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.75rem;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 1.2rem;
-            margin-top: 10px;
-            transition: background-color 0.3s ease;
         }
-        .voice-search:hover {
-            background-color: #218838;
+
+        .btn-voice {
+            background: var(--secondary-gradient);
+            color: white;
         }
+
+        .btn-search {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+            font-size: 1.5rem;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        /* Suggestions */
+        .suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            margin-top: 0.5rem;
+            max-height: 300px;
+            overflow-y: auto;
+            box-shadow: var(--shadow-soft);
+            z-index: 100;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .suggestions.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .suggestion-item {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 400;
+        }
+
+        .suggestion-item:hover {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Results */
+        .results {
+            flex: 1;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .definition-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        .definition-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-strong);
+        }
+
+        .card-header {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 1.5rem 2rem;
+            font-weight: 600;
+            font-size: 1.2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .definition-card:hover .card-header::before {
+            left: 100%;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .definition {
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+        }
+
+        .definition:last-child {
+            margin-bottom: 0;
+        }
+
+        /* History */
+        .history {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-soft);
+            animation: fadeInUp 0.8s ease-out 0.6s both;
+        }
+
+        .history h5 {
+            margin-bottom: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .history-list {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .history-item {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid var(--glass-border);
+        }
+
+        .history-item:hover {
+            background: var(--primary-gradient);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--glass-border);
+            border-top: 3px solid transparent;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Error */
+        .error {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .error-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .theme-toggle {
+                top: 1rem;
+                right: 1rem;
+                padding: 0.75rem;
+            }
+
+            .search-input {
+                padding: 1.25rem 4.5rem 1.25rem 1.5rem;
+                font-size: 1rem;
+            }
+
+            .search-controls {
+                right: 0.75rem;
+                gap: 0.25rem;
+            }
+
+            .btn {
+                padding: 0.6rem;
+                font-size: 1rem;
+            }
+
+            .btn-search {
+                padding: 0.6rem 1rem;
+            }
+
+            .card-header {
+                padding: 1.25rem 1.5rem;
+                font-size: 1.1rem;
+            }
+
+            .card-body {
+                padding: 1.5rem;
+            }
+
+            .definition {
+                font-size: 1rem;
+            }
+
+            .history-list {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .search-input {
+                padding: 1rem 4rem 1rem 1.25rem;
+            }
+
+            .search-controls {
+                flex-direction: column;
+                gap: 0.25rem;
+            }
+
+            .btn {
+                padding: 0.5rem;
+                font-size: 0.9rem;
+            }
+
+            .btn-search {
+                padding: 0.5rem 0.75rem;
+            }
+        }
+
+        /* Utility Classes */
+        .hidden { display: none !important; }
+        .text-center { text-align: center; }
+        .fade-in { animation: fadeInUp 0.6s ease-out; }
     </style>
 </head>
 <body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1 class="logo">Lexicon</h1>
+            <p class="subtitle">Discover the beauty of words</p>
+        </header>
 
-<div class="container">
-    <div class="d-flex justify-content-between mb-4">
-        <h1 class="display-4 text-primary">Dictionary</h1>
-    <button class="dark-mode-toggle" id="darkModeToggle">🌙 Dark Mode</button>
-    </div>
+        <!-- Theme Toggle -->
+        <button class="theme-toggle" id="themeToggle">🌙</button>
 
-    <div class="input-group mb-4">
-        <input type="text" id="wordInput" class="form-control" placeholder="Enter a word 💮️">
-        <button class="btn btn-primary" id="searchBtn">Search</button>
-    </div>
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-container">
+                <div class="search-wrapper">
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        class="search-input" 
+                        placeholder="Enter a word to explore..."
+                        autocomplete="off"
+                    >
+                    <div class="search-controls">
+                        <button class="btn btn-voice" id="voiceBtn" title="Voice Search">🎤</button>
+                        <button class="btn btn-search" id="searchBtn">Search</button>
+                    </div>
+                </div>
+                <div id="suggestions" class="suggestions"></div>
+            </div>
+        </div>
 
-<button class="voice-search" id="voiceSearchBtn">🎤</button>
+        <!-- Search History -->
+        <div id="searchHistory" class="history hidden">
+            <h5>Recent Searches</h5>
+            <ul id="historyList" class="history-list"></ul>
+        </div>
 
-    <!-- Suggestions -->
-    <div id="suggestions" class="suggestions"></div>
+        <!-- Results -->
+        <div id="results" class="results"></div>
 
-    <!-- Search History -->
-    
-
-    <!-- Results -->
-    <div id="results" class="results"></div>
-<div id="searchHistory" class="history"></div>
-    <!-- Loading Spinner -->
-    <div id="loadingSpinner" class="text-center d-none">
-        <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
+        <!-- Loading -->
+        <div id="loading" class="loading hidden">
+            <div class="spinner"></div>
         </div>
     </div>
-</div>
 
-<!-- Footer -->
-<footer>
-    <p>&copy; 2024 Made By Tanish Kshatriya</p>
-</footer>
+    <script>
+        class DictionaryApp {
+            constructor() {
+                this.searchInput = document.getElementById('searchInput');
+                this.searchBtn = document.getElementById('searchBtn');
+                this.voiceBtn = document.getElementById('voiceBtn');
+                this.suggestions = document.getElementById('suggestions');
+                this.results = document.getElementById('results');
+                this.loading = document.getElementById('loading');
+                this.themeToggle = document.getElementById('themeToggle');
+                this.searchHistory = document.getElementById('searchHistory');
+                this.historyList = document.getElementById('historyList');
+                
+                this.history = JSON.parse(localStorage.getItem('searchHistory') || '[]');
+                this.suggestionsTimeout = null;
+                
+                this.init();
+            }
 
-<!-- Bootstrap JS and Popper.js -->
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+            init() {
+                this.bindEvents();
+                this.loadTheme();
+                this.updateHistoryDisplay();
+            }
 
-<!-- Dictionary API Script -->
-<script>
-    const searchBtn = document.getElementById('searchBtn');
-    const wordInput = document.getElementById('wordInput');
-    const resultsDiv = document.getElementById('results');
-    const suggestionsDiv = document.getElementById('suggestions');
-    const loadingSpinner = document.getElementById('loadingSpinner');
-    const darkModeToggle = document.getElementById('darkModeToggle');
-    const searchHistoryDiv = document.getElementById('searchHistory');
-    const voiceSearchBtn = document.getElementById('voiceSearchBtn');
+            bindEvents() {
+                this.searchBtn.addEventListener('click', () => this.handleSearch());
+                this.searchInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.handleSearch();
+                });
+                this.searchInput.addEventListener('input', () => this.handleSuggestions());
+                this.voiceBtn.addEventListener('click', () => this.handleVoiceSearch());
+                this.themeToggle.addEventListener('click', () => this.toggleTheme());
+                
+                // Hide suggestions when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!this.suggestions.contains(e.target) && !this.searchInput.contains(e.target)) {
+                        this.hideSuggestions();
+                    }
+                });
+            }
 
-    let searchHistory = [];
+            async handleSearch() {
+                const word = this.searchInput.value.trim();
+                if (!word) return;
 
-    // Dark Mode Toggle
-    darkModeToggle.addEventListener('click', function () {
-        document.body.classList.toggle('dark-mode');
-    });
+                this.showLoading();
+                this.hideSuggestions();
 
-    // Voice Search functionality
-    voiceSearchBtn.addEventListener('click', function () {
-        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-        recognition.lang = 'en-US';
-        recognition.start();
-        recognition.onresult = function(event) {
-            const word = event.results[0][0].transcript;
-            wordInput.value = word;
-            searchWordMeaning(word);
-        };
-    });
+                try {
+                    const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+                    if (!response.ok) throw new Error('Word not found');
+                    
+                    const data = await response.json();
+                    this.displayResults(data);
+                    this.addToHistory(word);
+                } catch (error) {
+                    this.displayError();
+                } finally {
+                    this.hideLoading();
+                }
+            }
 
-  wordInput.addEventListener('input', function () {
-    const query = wordInput.value.trim();
-    if (query.length > 0) {
-        fetch(`https://api.datamuse.com/sug?s=${query}`)
-            .then(response => response.json())
-            .then(suggestions => {
-                suggestionsDiv.innerHTML = suggestions.map(suggestion => `
-                    <div class="suggestion-item" onclick="selectSuggestion('${suggestion.word}')">${suggestion.word}</div>
-                `).join('');
-            });
-    } else {
-        suggestionsDiv.innerHTML = '';
-    }
-});
+            async handleSuggestions() {
+                const query = this.searchInput.value.trim();
+                
+                if (this.suggestionsTimeout) {
+                    clearTimeout(this.suggestionsTimeout);
+                }
 
-// New function to handle selecting a suggestion
-function selectSuggestion(word) {
-    wordInput.value = word;
-    searchWord(word);
-    suggestionsDiv.innerHTML = '';  // Hide suggestions after selecting one
-}
+                if (query.length < 2) {
+                    this.hideSuggestions();
+                    return;
+                }
 
-  
+                this.suggestionsTimeout = setTimeout(async () => {
+                    try {
+                        const response = await fetch(`https://api.datamuse.com/sug?s=${query}&max=5`);
+                        const data = await response.json();
+                        this.displaySuggestions(data);
+                    } catch (error) {
+                        this.hideSuggestions();
+                    }
+                }, 300);
+            }
 
-    function searchWord(word) {
-        showLoading(true);
-        fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
-            .then(response => response.json())
-            .then(data => {
-                showLoading(false);
-                displayResults(data);
-                addToSearchHistory(word);
-            })
-            .catch(error => {
-                showLoading(false);
-                resultsDiv.innerHTML = '<p class="text-danger">No definition found!</p>';
-            });
-    }
+            handleVoiceSearch() {
+                if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                    alert('Voice search is not supported in your browser');
+                    return;
+                }
 
-    function displayResults(data) {
-        resultsDiv.innerHTML = data.map(entry => {
-            const word = entry.word;
-            const meaning = entry.meanings.map(meaning => `
-                <div class="card">
-                    <div class="card-header">${meaning.partOfSpeech}</div>
-                    <div class="card-body">${meaning.definitions.map(def => `<p>${def.definition}</p>`).join('')}</div>
-                </div>
-            `).join('');
-            return meaning;
-        }).join('');
-    }
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                const recognition = new SpeechRecognition();
+                
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.lang = 'en-US';
 
-    function showLoading(isLoading) {
-        if (isLoading) {
-            loadingSpinner.classList.remove('d-none');
-        } else {
-            loadingSpinner.classList.add('d-none');
+                recognition.onstart = () => {
+                    this.voiceBtn.style.background = 'var(--accent-gradient)';
+                    this.voiceBtn.style.animation = 'pulse 1s infinite';
+                };
+
+                recognition.onresult = (event) => {
+                    const word = event.results[0][0].transcript;
+                    this.searchInput.value = word;
+                    this.handleSearch();
+                };
+
+                recognition.onerror = () => {
+                    alert('Voice search failed. Please try again.');
+                };
+
+                recognition.onend = () => {
+                    this.voiceBtn.style.background = 'var(--secondary-gradient)';
+                    this.voiceBtn.style.animation = 'none';
+                };
+
+                recognition.start();
+            }
+
+            displaySuggestions(suggestions) {
+                if (suggestions.length === 0) {
+                    this.hideSuggestions();
+                    return;
+                }
+
+                this.suggestions.innerHTML = suggestions
+                    .map(item => `<div class="suggestion-item" data-word="${item.word}">${item.word}</div>`)
+                    .join('');
+
+                // Add click listeners
+                this.suggestions.querySelectorAll('.suggestion-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        this.searchInput.value = item.dataset.word;
+                        this.handleSearch();
+                        this.hideSuggestions();
+                    });
+                });
+
+                this.suggestions.classList.add('show');
+            }
+
+            hideSuggestions() {
+                this.suggestions.classList.remove('show');
+                setTimeout(() => {
+                    this.suggestions.innerHTML = '';
+                }, 300);
+            }
+
+            displayResults(data) {
+                this.results.innerHTML = data.map(entry => {
+                    return entry.meanings.map(meaning => {
+                        const definitions = meaning.definitions.map(def => 
+                            `<p class="definition">${def.definition}</p>`
+                        ).join('');
+                        
+                        return `
+                            <div class="definition-card fade-in">
+                                <div class="card-header">
+                                    ${entry.word} - ${meaning.partOfSpeech}
+                                </div>
+                                <div class="card-body">
+                                    ${definitions}
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }).join('');
+            }
+
+            displayError() {
+                this.results.innerHTML = `
+                    <div class="error fade-in">
+                        <div class="error-icon">🔍</div>
+                        <p>No definition found for this word.</p>
+                        <p>Please check your spelling and try again.</p>
+                    </div>
+                `;
+            }
+
+            showLoading() {
+                this.loading.classList.remove('hidden');
+                this.results.innerHTML = '';
+            }
+
+            hideLoading() {
+                this.loading.classList.add('hidden');
+            }
+
+            addToHistory(word) {
+                if (this.history.includes(word)) {
+                    this.history = this.history.filter(item => item !== word);
+                }
+                this.history.unshift(word);
+                this.history = this.history.slice(0, 10); // Keep only last 10
+                
+                localStorage.setItem('searchHistory', JSON.stringify(this.history));
+                this.updateHistoryDisplay();
+            }
+
+            updateHistoryDisplay() {
+                if (this.history.length === 0) {
+                    this.searchHistory.classList.add('hidden');
+                    return;
+                }
+
+                this.historyList.innerHTML = this.history
+                    .map(word => `<li class="history-item" data-word="${word}">${word}</li>`)
+                    .join('');
+
+                // Add click listeners
+                this.historyList.querySelectorAll('.history-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        this.searchInput.value = item.dataset.word;
+                        this.handleSearch();
+                    });
+                });
+
+                this.searchHistory.classList.remove('hidden');
+            }
+
+            toggleTheme() {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                
+                this.themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+            }
+
+            loadTheme() {
+                const savedTheme = localStorage.getItem('theme') || 'light';
+                document.documentElement.setAttribute('data-theme', savedTheme);
+                this.themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+            }
         }
-    }
 
-    function addToSearchHistory(word) {
-        if (!searchHistory.includes(word)) {
-            searchHistory.push(word);
-            searchHistoryDiv.innerHTML = `
-                <h5>Search History</h5>
-                <ul>
-                    ${searchHistory.map(item => `<li onclick="searchWord('${item}')">${item}</li>`).join('')}
-                </ul>
-            `;
-        }
-    }
+        // Add pulse animation for voice button
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes pulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.1); }
+                100% { transform: scale(1); }
+            }
+        `;
+        document.head.appendChild(style);
 
-    searchBtn.addEventListener('click', function () {
-        const word = wordInput.value.trim();
-        if (word) {
-            searchWordMeaning(word);
-        }
-    });
-
-    function searchWordMeaning(word) {
-        searchWord(word);
-    }
-</script>
+        // Initialize the app
+        new DictionaryApp();
+    </script>
 </body>
 </html>
