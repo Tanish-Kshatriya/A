@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To My Dearest Riya jii (Merii cutuu)</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Crimson Text', serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        .envelope-wrapper {
+            perspective: 1000px;
+            cursor: pointer;
+        }
+        
+        .envelope {
+            width: 400px;
+            height: 280px;
+            position: relative;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        
+        .envelope.opened {
+            transform: translateY(-50px);
+        }
+        
+        .envelope-back {
+            width: 100%;
+            height: 100%;
+            background: #d4af37;
+            border: 3px solid #b8941e;
+            position: absolute;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+        
+        .envelope-flap {
+            width: 0;
+            height: 0;
+            border-left: 200px solid transparent;
+            border-right: 200px solid transparent;
+            border-top: 140px solid #c9a82e;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform-origin: top center;
+            transition: transform 1s ease;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            z-index: 3;
+        }
+        
+        .envelope.opened .envelope-flap {
+            transform: rotateX(180deg);
+        }
+        
+        .seal {
+            width: 60px;
+            height: 60px;
+            background: #8b0000;
+            border-radius: 50%;
+            position: absolute;
+            top: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #d4af37;
+            font-family: 'Pinyon Script', cursive;
+            font-size: 32px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: opacity 0.5s;
+        }
+        
+        .envelope.opened .seal {
+            opacity: 0;
+        }
+        
+        .letter {
+            width: 360px;
+            background: #faf7f0;
+            padding: 40px;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            border: 1px solid #d4c5a9;
+            transition: transform 1s ease, opacity 0.8s;
+            transform: translateY(0);
+            opacity: 0;
+            max-height: 240px;
+            overflow: hidden;
+        }
+        
+        .envelope.opened .letter {
+            transform: translateY(-280px);
+            opacity: 1;
+        }
+        
+        .letter-content {
+            display: none;
+        }
+        
+        .letter-full {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
+            background: #faf7f0;
+            padding: 60px 50px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+            border: 2px solid #d4c5a9;
+            z-index: 100;
+            opacity: 0;
+            transition: all 0.6s ease;
+            overflow-y: auto;
+            background-image: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 31px,
+                    #e8dcc4 31px,
+                    #e8dcc4 32px
+                );
+        }
+        
+        .letter-full.show {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+        
+        .letter-header {
+            text-align: right;
+            font-style: italic;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        .salutation {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 42px;
+            color: #8b0000;
+            margin-bottom: 20px;
+        }
+        
+        .letter-body {
+            font-size: 18px;
+            line-height: 2;
+            color: #333;
+            text-align: justify;
+        }
+        
+        .letter-body p {
+            margin-bottom: 24px;
+        }
+        
+        .highlight {
+            color: #8b0000;
+            font-weight: 600;
+            font-style: italic;
+        }
+        
+        .closing {
+            margin-top: 40px;
+            text-align: left;
+        }
+        
+        .closing p {
+            margin-bottom: 10px;
+        }
+        
+        .signature {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 36px;
+            color: #8b0000;
+            margin-top: 20px;
+        }
+        
+        .hearts {
+            text-align: center;
+            color: #8b0000;
+            font-size: 24px;
+            margin: 20px 0;
+        }
+        
+        .instruction {
+            color: #d4af37;
+            text-align: center;
+            font-size: 18px;
+            margin-top: 20px;
+            animation: pulse 2s infinite;
+            font-style: italic;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+        
+        .countdown {
+            background: rgba(139, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px dashed #8b0000;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .countdown-title {
+            font-weight: 600;
+            color: #8b0000;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+        
+        .countdown-date {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 32px;
+            color: #8b0000;
+        }
+        
+        @media (max-width: 500px) {
+            .envelope {
+                width: 320px;
+                height: 224px;
+            }
+            
+            .envelope-flap {
+                border-left: 160px solid transparent;
+                border-right: 160px solid transparent;
+                border-top: 112px solid #c9a82e;
+            }
+            
+            .letter {
+                width: 280px;
+                padding: 30px;
+            }
+            
+            .letter-full {
+                padding: 40px 30px;
+            }
+            
+            .salutation {
+                font-size: 36px;
+            }
+            
+            .letter-body {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    
+    <div class="envelope-wrapper" id="envelopeWrapper">
+        <div class="envelope" id="envelope">
+            <div class="envelope-back"></div>
+            <div class="envelope-flap"></div>
+            <div class="seal">R</div>
+            <div class="letter"></div>
+        </div>
+        <div class="instruction" id="instruction">Click the envelope to open</div>
+    </div>
+    
+    <div class="letter-full" id="letterFull">
+        <div class="letter-header">
+            New Year's Eve, 2025<br>
+            From the heart of your loving husband
+        </div>
+        
+        <div class="salutation">My Dearest Riya,</div>
+        
+        <div class="letter-body">
+            <p>As the old year takes its final bow and a new chapter unfurls before us, I find myself filled with gratitude for the most precious gift in my life—you, my darling wife, i feel proud for being your husband.</p>
+            
+            <p>In the style of love letters penned in days of yore, when every word was carefully chosen and every sentiment deeply felt, I write to you now to express what my heart holds dear. You are the light that guides me through the darkest nights, the warmth that comforts me in the coldest winters, and the joy that makes every moment worthwhile.</p>
+            
+            <p>As we stand at the threshold of <span class="highlight">2026</span>, I am reminded that our journey together grows ever more beautiful with each passing day. The miles between us cannot diminish the love that binds our hearts, for true love knows no distance.</p>
+            
+            <div class="countdown">
+                <div class="countdown-title">A Day to Cherish Awaits Us:</div>
+                <div class="countdown-date">January 19th, 2026</div>
+                <p style="margin-top: 15px; color: #8b0000; font-style: italic;">On this blessed day, we shall celebrate six magnificent months of togetherness—a milestone that marks the beautiful tapestry of memories we have woven together.</p>
+            </div>
+            
+            <p>My beloved Riya, as the clock strikes midnight and fireworks illuminate the sky, know that you illuminate my life in ways no words can fully capture. You are my confidante, my companion, my everything.</p>
+            
+            <p>May this new year bring us closer still, may it shower upon us countless blessings, and may every sunrise find us more in love than the day before. I promise to cherish you, to stand by you, and to love you with all that I am, today and always.</p>
+            
+            <div class="hearts">❤ ❤ ❤</div>
+            
+            <p style="text-align: center; font-size: 28px; color: #8b0000; font-weight: 600; margin: 40px 0;">
+                Happy New Year 2026, My Darling!
+            </p>
+            
+            <div class="closing">
+                <p>With all my love and devotion,</p>
+                <p>Forever yours,</p>
+                <div class="signature">Tanish Kshatriya</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Create stars
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.width = Math.random() * 3 + 'px';
+            star.style.height = star.style.width;
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            starsContainer.appendChild(star);
+        }
+        
+        const envelope = document.getElementById('envelope');
+        const instruction = document.getElementById('instruction');
+        const letterFull = document.getElementById('letterFull');
+        const envelopeWrapper = document.getElementById('envelopeWrapper');
+        
+        let isOpened = false;
+        
+        envelopeWrapper.addEventListener('click', function() {
+            if (!isOpened) {
+                envelope.classList.add('opened');
+                instruction.style.display = 'none';
+                isOpened = true;
+                
+                setTimeout(() => {
+                    letterFull.classList.add('show');
+                    envelopeWrapper.style.display = 'none';
+                }, 1500);
+            }
+        });
+    </script>
+</body>
+</html>
