@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To My Dearest Riya</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background: radial-gradient(ellipse at top, #1a0a2e 0%, #0f051d 50%, #050210 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 30%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(218, 165, 32, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(139, 0, 0, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+            box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        
+        .shooting-star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8);
+            animation: shoot 3s ease-out infinite;
+        }
+        
+        @keyframes shoot {
+            0% {
+                transform: translateX(0) translateY(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(-300px) translateY(300px);
+                opacity: 0;
+            }
+        }
+        
+        .sparkles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+        
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: gold;
+            border-radius: 50%;
+            animation: sparkle 2s ease-in-out infinite;
+            box-shadow: 0 0 10px gold;
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+        
+        .envelope-wrapper {
+            perspective: 1500px;
+            cursor: pointer;
+            z-index: 10;
+            position: relative;
+            filter: drop-shadow(0 20px 40px rgba(212, 175, 55, 0.3));
+        }
+        
+        .envelope {
+            width: 450px;
+            height: 300px;
+            position: relative;
+            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transform-style: preserve-3d;
+        }
+        
+        .envelope:hover {
+            transform: translateY(-10px) scale(1.02);
+            filter: brightness(1.1);
+        }
+        
+        .envelope.opened {
+            transform: translateY(-80px) scale(0.95);
+        }
+        
+        .envelope-back {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #d4af37 0%, #f4d03f 50%, #d4af37 100%);
+            border: 4px solid #b8941e;
+            position: absolute;
+            box-shadow: 
+                0 15px 50px rgba(0,0,0,0.6),
+                inset 0 2px 10px rgba(255, 255, 255, 0.3),
+                0 0 30px rgba(212, 175, 55, 0.4);
+            border-radius: 3px;
+        }
+        
+        .envelope-back::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+        }
+        
+        .envelope-flap {
+            width: 0;
+            height: 0;
+            border-left: 225px solid transparent;
+            border-right: 225px solid transparent;
+            border-top: 150px solid #c9a82e;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform-origin: top center;
+            transition: transform 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            z-index: 3;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4));
+        }
+        
+        .envelope-flap::after {
+            content: '';
+            position: absolute;
+            top: -145px;
+            left: -220px;
+            width: 440px;
+            height: 140px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
+        }
+        
+        .envelope.opened .envelope-flap {
+            transform: rotateX(180deg);
+        }
+        
+        .seal {
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, #b22222 0%, #8b0000 70%, #660000 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 130px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #d4af37;
+            font-family: 'Pinyon Script', cursive;
+            font-size: 44px;
+            box-shadow: 
+                0 6px 20px rgba(139, 0, 0, 0.8),
+                inset 0 2px 5px rgba(255, 255, 255, 0.2);
+            transition: all 0.6s;
+            border: 3px solid #660000;
+            animation: sealGlow 3s ease-in-out infinite;
+        }
+        
+        @keyframes sealGlow {
+            0%, 100% { box-shadow: 0 6px 20px rgba(139, 0, 0, 0.8), inset 0 2px 5px rgba(255, 255, 255, 0.2), 0 0 20px rgba(139, 0, 0, 0.4); }
+            50% { box-shadow: 0 6px 25px rgba(139, 0, 0, 1), inset 0 2px 5px rgba(255, 255, 255, 0.3), 0 0 40px rgba(139, 0, 0, 0.6); }
+        }
+        
+        .envelope.opened .seal {
+            opacity: 0;
+            transform: translateX(-50%) scale(0);
+        }
+        
+        .letter {
+            width: 400px;
+            background: linear-gradient(to bottom, #faf7f0 0%, #f5f2e8 100%);
+            padding: 40px;
+            position: absolute;
+            top: 20px;
+            left: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            border: 2px solid #d4c5a9;
+            transition: all 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transform: translateY(0);
+            opacity: 0;
+            max-height: 260px;
+            overflow: hidden;
+        }
+        
+        .envelope.opened .letter {
+            transform: translateY(-320px);
+            opacity: 1;
+        }
+        
+        .letter-full {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0) rotateY(90deg);
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            background: linear-gradient(to bottom, #faf7f0 0%, #f5f2e8 50%, #faf7f0 100%);
+            padding: 70px 60px;
+            box-shadow: 
+                0 30px 80px rgba(0,0,0,0.7),
+                inset 0 0 100px rgba(212, 175, 55, 0.1);
+            border: 3px solid #d4c5a9;
+            z-index: 100;
+            opacity: 0;
+            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            overflow-y: auto;
+            background-image: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 31px,
+                    rgba(212, 197, 169, 0.3) 31px,
+                    rgba(212, 197, 169, 0.3) 32px
+                );
+            border-radius: 8px;
+        }
+        
+        .letter-full::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 5px;
+            pointer-events: none;
+        }
+        
+        .letter-full.show {
+            transform: translate(-50%, -50%) scale(1) rotateY(0deg);
+            opacity: 1;
+        }
+        
+        .letter-header {
+            text-align: right;
+            font-style: italic;
+            color: #8b6914;
+            margin-bottom: 40px;
+            font-size: 18px;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 1px;
+        }
+        
+        .ornament {
+            text-align: center;
+            color: #d4af37;
+            font-size: 32px;
+            margin: 20px 0;
+            opacity: 0.7;
+        }
+        
+        .salutation {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 52px;
+            background: linear-gradient(135deg, #8b0000 0%, #b22222 50%, #8b0000 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(139, 0, 0, 0.2);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+        
+        @keyframes shimmer {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        .letter-body {
+            font-size: 20px;
+            line-height: 2.2;
+            color: #2c2c2c;
+            text-align: justify;
+            position: relative;
+        }
+        
+        .letter-body p {
+            margin-bottom: 28px;
+            position: relative;
+        }
+        
+        .letter-body p::first-letter {
+            font-size: 38px;
+            font-weight: 600;
+            color: #8b0000;
+            float: left;
+            line-height: 1;
+            margin: 5px 8px 0 0;
+        }
+        
+        .highlight {
+            color: #8b0000;
+            font-weight: 600;
+            font-style: italic;
+            text-shadow: 0 0 10px rgba(139, 0, 0, 0.2);
+        }
+        
+        .closing {
+            margin-top: 50px;
+            text-align: left;
+        }
+        
+        .closing p {
+            margin-bottom: 12px;
+            font-size: 20px;
+        }
+        
+        .signature {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 48px;
+            background: linear-gradient(135deg, #8b0000 0%, #b22222 50%, #8b0000 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-top: 25px;
+        }
+        
+        .hearts {
+            text-align: center;
+            font-size: 32px;
+            margin: 30px 0;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+        }
+        
+        .hearts span {
+            display: inline-block;
+            animation: floatHeart 3s ease-in-out infinite;
+            color: #8b0000;
+            filter: drop-shadow(0 0 5px rgba(139, 0, 0, 0.5));
+        }
+        
+        .hearts span:nth-child(1) { animation-delay: 0s; }
+        .hearts span:nth-child(2) { animation-delay: 0.3s; }
+        .hearts span:nth-child(3) { animation-delay: 0.6s; }
+        
+        @keyframes floatHeart {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .instruction {
+            color: #f4d03f;
+            text-align: center;
+            font-size: 20px;
+            margin-top: 30px;
+            animation: pulse 2s infinite;
+            font-style: italic;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(244, 208, 63, 0.6);
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+        
+        .countdown {
+            background: linear-gradient(135deg, rgba(139, 0, 0, 0.08) 0%, rgba(178, 34, 34, 0.12) 100%);
+            padding: 35px;
+            border-radius: 15px;
+            border: 3px solid #8b0000;
+            margin: 40px 0;
+            text-align: center;
+            box-shadow: 
+                0 10px 30px rgba(139, 0, 0, 0.2),
+                inset 0 2px 10px rgba(255, 255, 255, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .countdown::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .countdown-title {
+            font-weight: 600;
+            color: #8b0000;
+            margin-bottom: 15px;
+            font-size: 24px;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 1px;
+            position: relative;
+        }
+        
+        .countdown-date {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 42px;
+            background: linear-gradient(135deg, #8b0000 0%, #b22222 50%, #8b0000 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+        
+        .countdown p {
+            position: relative;
+        }
+        
+        .final-message {
+            text-align: center;
+            font-size: 36px;
+            color: #8b0000;
+            font-weight: 600;
+            margin: 50px 0;
+            font-family: 'Cinzel', serif;
+            text-shadow: 2px 2px 8px rgba(139, 0, 0, 0.3);
+            letter-spacing: 2px;
+            animation: glow 2s ease-in-out infinite;
+        }
+        
+        @keyframes glow {
+            0%, 100% { text-shadow: 2px 2px 8px rgba(139, 0, 0, 0.3), 0 0 20px rgba(139, 0, 0, 0.2); }
+            50% { text-shadow: 2px 2px 15px rgba(139, 0, 0, 0.5), 0 0 40px rgba(139, 0, 0, 0.4); }
+        }
+        
+        @media (max-width: 600px) {
+            .envelope {
+                width: 340px;
+                height: 227px;
+            }
+            
+            .envelope-flap {
+                border-left: 170px solid transparent;
+                border-right: 170px solid transparent;
+                border-top: 113px solid #c9a82e;
+            }
+            
+            .letter {
+                width: 300px;
+                padding: 30px;
+                left: 20px;
+            }
+            
+            .letter-full {
+                padding: 50px 30px;
+            }
+            
+            .salutation {
+                font-size: 42px;
+            }
+            
+            .letter-body {
+                font-size: 18px;
+                line-height: 2;
+            }
+            
+            .final-message {
+                font-size: 28px;
+            }
+            
+            .seal {
+                width: 70px;
+                height: 70px;
+                font-size: 38px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    <div class="sparkles" id="sparkles"></div>
+    
+    <div class="envelope-wrapper" id="envelopeWrapper">
+        <div class="envelope" id="envelope">
+            <div class="envelope-back"></div>
+            <div class="envelope-flap"></div>
+            <div class="seal">R</div>
+            <div class="letter"></div>
+        </div>
+        <div class="instruction" id="instruction">✨ Click to Open Your Letter ✨</div>
+    </div>
+    
+    <div class="letter-full" id="letterFull">
+        <div class="letter-header">
+            New Year's Eve, 2025<br>
+            From the heart of your devoted husband
+        </div>
+        
+        <div class="ornament">❈ ❈ ❈</div>
+        
+        <div class="salutation">My Dearest Riya,</div>
+        
+        <div class="letter-body">
+            <p>As the final moments of this year fade into memory and the dawn of a new beginning beckons, I find myself overwhelmed with gratitude for the most precious treasure life has bestowed upon me—you, my beloved wife, my eternal companion.</p>
+            
+            <p>In the tradition of love letters from ages past, when words were crafted with devotion and every sentiment flowed from the depths of the soul, I pen this letter to you. You are the radiant light that illuminates my darkest hours, the gentle warmth that comforts my weary spirit, and the unwavering joy that makes every breath worthwhile.</p>
+            
+            <p>As we stand together at the magnificent threshold of <span class="highlight">2026</span>, my heart swells with the knowledge that our love story continues to blossom with each passing season. Though miles may separate our physical presence, they are powerless against the invisible threads of devotion that bind our souls together across any distance.</p>
+            
+            <div class="countdown">
+                <div class="countdown-title">✧ A Sacred Milestone Awaits ✧</div>
+                <div class="countdown-date">January 19th, 2026</div>
+                <p style="margin-top: 20px; color: #8b0000; font-style: italic; font-size: 19px;">On this blessed day, we shall commemorate six magnificent months of togetherness—a journey adorned with countless precious moments, tender whispers, and a love that grows stronger with each sunrise.</p>
+            </div>
+            
+            <p>My cherished Riya, when the clock strikes midnight and the heavens burst forth with brilliant fireworks, know that you are the most dazzling light in my universe. No celestial display could ever rival the radiance you bring to my existence. You are my confidante in times of uncertainty, my companion through life's winding paths, my reason for being, my everything.</p>
+            
+            <p>May this glorious new year shower upon us an abundance of blessings beyond measure. May it draw us ever closer in heart and spirit. May every dawn find us more deeply in love than we were the evening before. I solemnly promise to cherish you with every fiber of my being, to stand steadfastly by your side through sunshine and storm, and to love you with an intensity that transcends time itself—today, tomorrow, and for all the days that follow.</p>
+            
+            <div class="hearts">
+                <span>❤</span>
+                <span>❤</span>
+                <span>❤</span>
+            </div>
+            
+            <div class="ornament">❈ ❈ ❈</div>
+            
+            <p class="final-message">
+                Happy New Year 2026, My Darling!
+            </p>
+            
+            <div class="ornament" style="font-size: 24px;">✧ ✧ ✧</div>
+            
+            <div class="closing">
+                <p>With boundless love and eternal devotion,</p>
+                <p>Forever and always yours,</p>
+                <div class="signature">Tanish Kshatriya</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Create stars
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 150; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            const size = Math.random() * 3 + 1;
+            star.style.width = size + 'px';
+            star.style.height = size + 'px';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            star.style.animationDuration = (Math.random() * 2 + 2) + 's';
+            starsContainer.appendChild(star);
+        }
+        
+        // Create shooting stars
+        for (let i = 0; i < 3; i++) {
+            const shootingStar = document.createElement('div');
+            shootingStar.className = 'shooting-star';
+            shootingStar.style.left = Math.random() * 100 + '%';
+            shootingStar.style.top = Math.random() * 50 + '%';
+            shootingStar.style.animationDelay = (Math.random() * 5 + 2) + 's';
+            shootingStar.style.animationDuration = (Math.random() * 2 + 2) + 's';
+            starsContainer.appendChild(shootingStar);
+        }
+        
+        // Create sparkles
+        const sparklesContainer = document.getElementById('sparkles');
+        for (let i = 0; i < 30; i++) {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.style.left = Math.random() * 100 + '%';
+            sparkle.style.top = Math.random() * 100 + '%';
+            sparkle.style.animationDelay = Math.random() * 2 + 's';
+            sparkle.style.animationDuration = (Math.random() * 2 + 1) + 's';
+            sparklesContainer.appendChild(sparkle);
+        }
+        
+        const envelope = document.getElementById('envelope');
+        const instruction = document.getElementById('instruction');
+        const letterFull = document.getElementById('letterFull');
+        const envelopeWrapper = document.getElementById('envelopeWrapper');
+        
+        let isOpened = false;
+        
+        envelopeWrapper.addEventListener('click', function() {
+            if (!isOpened) {
+                envelope.classList.add('opened');
+                instruction.style.display = 'none';
+                isOpened = true;
+                
+                setTimeout(() => {
+                    letterFull.classList.add('show');
+                    setTimeout(() => {
+                        envelopeWrapper.style.display = 'none';
+                    }, 800);
+                }, 1800);
+            }
+        });
+    </script>
+</body>
+</html>
